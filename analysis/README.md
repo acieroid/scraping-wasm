@@ -1,3 +1,9 @@
+Given the following files, produced by the [processing](../processing) phase:
+ - the scraped data in the `bytecode` directory, as a list of `.wasm` files with their sha256 sum as name
+ - the corresponding JavaScript files that loaded them in `source`, with their sha256 sum as name
+ - `results.csv` containing some metadata
+
+The following questions can be answered.
 
 # How many domains use the same Wasm module?
 ```sh
@@ -9,7 +15,9 @@ $ ./use-per-module.sh
 1       b4f7547ecdf2486059b2bb3cdeaa237e05794cd245acda77eea12439ff1b96db
 ...
 ```
-Can be sorted with `sort -g`
+Can be sorted with `sort -g`.
+*Interpretation*: 4 different domains ure using the module `bytecode/add757886deecba0270184f127cc2a258e7ac4f72c23214f2604d1ec32fb2f82.wasm`.
+
 # What are the imports of a Wasm module?
 Requires [wassail](https://github.com/acieroid/wassail).
 ```
@@ -48,6 +56,8 @@ $ ./count-instructions.sh
 5340205 i32.const
 10168217 local.get
 ```
+
+*Interpretation*: `local.get` is used 10168217 times in the data set.
 # What is the statistical distribution of binary sizes of WebAssembly modules?
 ```
 $ ./binary-size.h
@@ -78,6 +88,8 @@ func:
 	mean: 1447.83
 ...
 ```
+(Sizes are given in bytes)
+
 # How is the code loaded from JavaScript
 TODO
 # Are there similar WebAssembly modules?
