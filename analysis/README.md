@@ -39,9 +39,45 @@ $ ./use-extended-features.sh
 ```
 
 # Which instructions are the most used?
-TODO
+Requires [wassail](https://github.com/acieroid/wassail).
+```
+$ ./count-instructions.sh
+...
+2320985 i32.add
+2831347 load
+5340205 i32.const
+10168217 local.get
+```
+# What is the statistical distribution of binary sizes of WebAssembly modules?
+```
+$ ./binary-size.h
+min: 8 bytes
+max: 18613979 bytes
+median: 86053 bytes
+mean: 917116 bytes
+```
 # What is the size of sections in WebAssembly module?
-TODO
+Requires [wassail](https://github.com/acieroid/wassail).
+```
+$ ./section-sizes.sh
+...
+type:
+	min: 0
+	max: 3443
+	median: 99
+	mean: 377.709
+import:
+	min: 0
+	max: 35860
+	median: 70
+	mean: 1344.11
+func:
+	min: 0
+	max: 15449
+	median: 53
+	mean: 1447.83
+...
+```
 # How is the code loaded from JavaScript
 TODO
 # Are there similar WebAssembly modules?
