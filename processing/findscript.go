@@ -128,6 +128,13 @@ func ExtractScriptInfo(url string) []ScriptInfo {
 		}
 	})
 
+	executionContexts := make(map[runtime.ExecutionContextID]runtime.ExecutionContextDescription)
+	chromedp.ListenTarget(ctx, func(ev interface{}) {
+		if ev, ok := ev.(*runtime.EventExecutionContextCreated); ok {
+			executionContexts[ev.Context.ID] = *ev.Context;
+		}
+	})
+
 	// Setup a timeout
 	ctxWithTimeout, cancel := context.WithTimeout(ctx, TIMEOUT_SECONDS * time.Second)
 	defer cancel()
@@ -170,7 +177,12 @@ func ExtractScriptInfo(url string) []ScriptInfo {
 			}
 			scriptInfo.CalledFromHash = SaveSourceGetHash(source, bytecode)
 			scriptInfo.CalledFrom = fmt.Sprintf("%s:%d:%d:%s", callFrame.FunctionName, callFrame.LineNumber, callFrame.ColumnNumber, callFrame.URL)
+		} else {
+			log.Printf("no stack trace")
 		}
+
+		executionContext := executionContexts[script.ExecutionContextID]
+		log.Printf("ex context: origin=%s, name=%s, auxdata=%s", executionContext.Origin, executionContext.Name, string(executionContext.AuxData))
 		result = append(result, scriptInfo)
 	}
 	return result
